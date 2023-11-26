@@ -1,0 +1,152 @@
+% \documentclass[dvipdfmx, 11pt]{beamer}
+\documentclass[aspectratio=169, dvipdfmx, 11pt]{beamer} % aspectratio=43, 149, 169
+\usepackage{here, amsmath, latexsym, amssymb, bm, ascmac, mathtools, multicol, tcolorbox, subfig}
+
+%デザインの選択(省略可)
+\usetheme{Luebeck}
+%カラーテーマの選択(省略可)
+\usecolortheme{orchid}
+%フォントテーマの選択(省略可)
+\usefonttheme{professionalfonts}
+%フレーム内のテーマの選択(省略可)
+\useinnertheme{circles}
+%フレーム外側のテーマの選択(省略可)
+\useoutertheme{infolines}
+%しおりの文字化け解消
+\usepackage{atbegshi}
+\ifnum 42146=\euc"A4A2
+\AtBeginShipoutFirst{\special{pdf:tounicode EUC-UCS2}}
+\else
+\AtBeginShipoutFirst{\special{pdf:tounicode 90ms-RKSJ-UCS2}}
+\fi
+%ナビゲーションバー非表示
+\setbeamertemplate{navigation symbols}{}
+%既定をゴシック体に
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+%タイトル色
+\setbeamercolor{title}{fg=structure, bg=}
+%フレームタイトル色
+\setbeamercolor{frametitle}{fg=structure, bg=}
+%スライド番号のみ表示
+%\setbeamertemplate{footline}[frame number]
+%itemize
+\setbeamertemplate{itemize item}{\small\raise0.5pt\hbox{$\bullet$}}
+\setbeamertemplate{itemize subitem}{\tiny\raise1.5pt\hbox{$\blacktriangleright$}}
+\setbeamertemplate{itemize subsubitem}{\tiny\raise1.5pt\hbox{$\bigstar$}}
+% color
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\green}[1]{\textcolor{green!40!black}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue!80!black}{#1}}
+
+%----------------------------------↑設定--------------------------------%
+
+\title{Pythonによるグラフ最適化}
+\author[Ota Kawai]{BV21053 河合桜汰}
+\institute[G-Zhai Lab]{協調制御研究室}
+\date{November 30,2023}
+
+\begin{document}
+
+\frame{
+\titlepage
+}
+
+\frame{
+\frametitle{発表概要}
+\tableofcontents
+}
+
+\section{現在まで勉強したこと}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\frame{
+\frametitle{現在まで勉強したこと}%---
+Pythonというプログラミング言語を用いて、グラフ最適化の勉強をしてきました。現在は、様々なアルゴリズムや問題をPythonで実装しながら勉強を進めています。
+また、Pythonについても初めて触れたので文法書も並行して進めています。
+
+ \vspace{\baselineskip}
+(例)木構造、ネットワーク連結問題、ダイクストラ法...
+}
+
+\section{グラフ最適化とは}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\frame{
+\frametitle{グラフ最適化とは}%---
+
+グラフ最適化は、グラフ理論の枠組みで構築された問題を解く手法やアルゴリズム。
+ \vskip \baselineskip
+(グラフ最適化の応用例)
+ \vskip \baselineskip
+最短経路の探索: ある2つの都市間の最短経路を見つける。
+ \vskip \baselineskip
+最小費用の経路探索: 移動や通信にかかるコストが最小の経路を見つける。
+ \vskip \baselineskip
+最大流量の探索: グラフ内の経路において最大の流量を見つける。
+}
+\frame{
+\frametitle{グラフ最適化とは}%---
+グラフ最適化には様々なアルゴリズムがある。
+ \vskip \baselineskip
+・ダイクストラ法
+ \vskip \baselineskip
+・最小全域木アルゴリズム
+ \vskip \baselineskip
+・深さ優先探索（DFS）や幅優先探索（BFS）
+}
+
+\section{グラフの数式による表現と様々なグラフ}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\begin{frame}
+\frametitle{グラフの数式による表現}
+\begin{block}{グラフの数式表現}
+  G = (V,E),\quad V = \{A,B,C,D\},\quad E = \{a,b,c,d,e,f,g\}
+  \quad a = \{A,B\},\quad b = \{A,B\}, \quad c = \{A,C\}
+\end{block}
+\includegraphics[width=1.0\linewidth]{konigsberg.png}
+\end{frame}
+
+\begin{frame}
+\frametitle{様々なグラフ}
+\begin{block}{様々なグラフ}
+自己ループや多重辺を持たないグラフを単純グラフ(simple graph)という。さらにどの頂点間も枝で隣接している単純グラフを完全グラフ(complete graph)といい、頂点が$n$の完全グラフを$K_n$で表す。
+\end{block}
+\centering
+\includegraphics[width=0.5\linewidth]
+{completeGraph.png}
+\end{frame}
+
+\begin{frame}
+\frametitle{様々なグラフ}
+\begin{block}{様々なグラフ}
+グラフの頂点集合$V$が2つの部分集合$X$と$Y$に分割され、どの枝も$X$と$Y$の点両方に接続しているとき、そのグラフを2部グラフ(bipartite graph)といいます。さらに$X$と$Y$のどの頂点間にも枝が存在する時、完全2部グラフといい、$K_{m,n}$で表します。ただし、$m$を頂点の数、$n$を$Y$の頂点数とします。ここで、$V$が$X$と$Y$に分割されるとは、$V = X \cup Y$かつ$X \cap Y = \emptyset$が成り立つことである。
+\end{block}
+\centering
+\includegraphics[width=0.4\linewidth]
+{twoCompleteGraph.png}
+\end{frame}
+
+
+\section{今後の研究計画}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\frame{
+\frametitle{今後の研究計画}%---
+グラフの分割と最適化について学ぶ。
+ \vskip \baselineskip
+ その中でも、辺彩色問題や時間割問題について詳しく学習する。
+}
+
+\section{参考文献}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\frame{
+\frametitle{参考文献}%---
+Pythonによる数理最適化入門【朝倉書店】
+ \vskip \baselineskip
+新・明解Python入門【＝SB Creative】
+}
+
+
+\end{document}
