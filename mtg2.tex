@@ -1,0 +1,158 @@
+% \documentclass[dvipdfmx, 11pt]{beamer}
+\documentclass[aspectratio=169, dvipdfmx, 11pt]{beamer} % aspectratio=43, 149, 169
+\usepackage{here, amsmath, latexsym, amssymb, bm, ascmac, mathtools, multicol, tcolorbox, subfig}
+
+%デザインの選択(省略可)
+\usetheme{Luebeck}
+%カラーテーマの選択(省略可)
+\usecolortheme{orchid}
+%フォントテーマの選択(省略可)
+\usefonttheme{professionalfonts}
+%フレーム内のテーマの選択(省略可)
+\useinnertheme{circles}
+%フレーム外側のテーマの選択(省略可)
+\useoutertheme{infolines}
+%しおりの文字化け解消
+\usepackage{atbegshi}
+\ifnum 42146=\euc"A4A2
+\AtBeginShipoutFirst{\special{pdf:tounicode EUC-UCS2}}
+\else
+\AtBeginShipoutFirst{\special{pdf:tounicode 90ms-RKSJ-UCS2}}
+\fi
+%ナビゲーションバー非表示
+\setbeamertemplate{navigation symbols}{}
+%既定をゴシック体に
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+%タイトル色
+\setbeamercolor{title}{fg=structure, bg=}
+%フレームタイトル色
+\setbeamercolor{frametitle}{fg=structure, bg=}
+%スライド番号のみ表示
+%\setbeamertemplate{footline}[frame number]
+%itemize
+\setbeamertemplate{itemize item}{\small\raise0.5pt\hbox{$\bullet$}}
+\setbeamertemplate{itemize subitem}{\tiny\raise1.5pt\hbox{$\blacktriangleright$}}
+\setbeamertemplate{itemize subsubitem}{\tiny\raise1.5pt\hbox{$\bigstar$}}
+% color
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\green}[1]{\textcolor{green!40!black}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue!80!black}{#1}}
+
+%----------------------------------↑設定--------------------------------%
+
+\title{Pythonによるグラフ最適化}
+\author[Ota Kawai]{BV21053 河合桜汰}
+\institute[G-Zhai Lab]{協調制御研究室}
+\date{November 30,2023}
+
+\begin{document}
+
+\frame{
+\titlepage
+}
+
+\frame{
+\frametitle{発表概要}
+\tableofcontents
+}
+
+\section{今週の進捗}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\frame{
+\frametitle{今週の進捗}%---
+辺彩色問題やクロマティックインデックスなどの問題についての理解を深めた。
+ \vskip \baselineskip
+また、Pythonを用いて辺彩色問題の解法を実装することができた。
+}
+
+\section{様々なグラフ}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\begin{frame}
+\frametitle{様々なグラフ}%---
+\begin{block}{サイクル、星グラフ、車輪グラフ}
+1から$n$の頂点が順に枝で繋がっていて、1に戻ってくるようなグラフを\textcolor{red}{サイクルグラフ}という。サイクル上の頂点の個数をサイクルの長さといい、長さが奇数のサイクルを奇サイクル、長さが偶数のサイクルを偶サイクルという。1つの中心頂点から他の頂点への放射状のエッジを持っているようなグラフを\textcolor{red}{星グラフ(star graph)}という。
+1つの中心頂点とその周りに放射状に配置された頂点から成るグラフようなグラフを\textcolor{red}{車輪グラフ(wheel graph)}という。
+\end{block}
+\centering
+\includegraphics[width=0.3\linewidth]{sycle.png}
+\includegraphics[width=0.3\linewidth]{starGraph.png}
+\includegraphics[width=0.3\linewidth]{wheelGraph.png}
+\end{frame}
+
+\section{次数}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\begin{frame}
+\frametitle{次数}
+\begin{block}{次数}
+グラフ$G=(V,E)$において、頂点${v \in V}$に接続している枝の数を$v$の次数$(degree)$といい、$deg(v)$で表す。自己ループ分の次数は$+2$される。
+\end{block}
+\centering
+\includegraphics[width=0.4\linewidth]{sycle.png}
+\end{frame}
+
+\begin{frame}
+\frametitle{次数}
+\begin{block}{握手の定理}
+$G=(V,E)$をグラフとすると、
+\begin{equation}
+\sum_{v \in V} \text{deg}(v) = 2|E|
+\end{equation}
+が成り立つ。
+\end{block}
+\centering
+\includegraphics[width=0.4\linewidth]{sycle.png}
+\end{frame}
+
+\section{同型}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+\begin{frame}
+\frametitle{同型}
+\begin{block}{グラフが同型であるとは}
+グラフ$G = (V,E)$と$G' = (V',E')$において、頂点集合$V$と$V'$の要素間に1対1の対応がつけられていて、その対応関係において、枝集合$E$と$E'$に過不足がない時、$G$と$G'$は同型(isomorphic)であるという。
+ここで、$V = \{1, 2, \ldots, n\}$で、$V' = \{1, 2, \ldots, n\}$において、$i$と$i'$が対応する時、枝集合$E$と$E'$に過不足がないということは、$(i,j) \in E \rightleftharpoons (i',j') \in E'$が成り立つことをいう。
+\end{block}
+\centering
+\includegraphics[width=0.45\linewidth]
+{img/samaGraph.png}
+\includegraphics[width=0.3\linewidth]
+{img/noSameGraph.png}
+\end{frame}
+
+\section{部分グラフ}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+\begin{frame}
+\frametitle{部分グラフ}
+\begin{block}{部分グラフと誘導グラフ}
+グラフ$G = (V,E)$に対して、$V$の部分集合$V' \subseteq V$と$E$の部分集合$E'$について、$G' = (V',E')$がグラフを形成するとき、$G'$を$G$のグラフ部分グラフ(subgraph)という。また、$G = (V,E)$と$V' \subseteq V$に対して、$E' = \{(u,v) | (u,v) \in E ,u,v \in V'\}$とした時$G = (V',E')$は部分グラフとなる。$G' = (V',E')$は部分グラフとなる。$G'$を$V'$が誘導(induce)する部分グラフという。
+\end{block}
+\centering
+\includegraphics[width=0.5\linewidth]
+{img/subGraph.png}
+\end{frame}
+
+
+\section{今後の研究計画}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\frame{
+\frametitle{今後の研究計画}%---
+クロマティックナンバーやBrooksの定理について学習する。
+ \vskip \baselineskip
+アルゴリズムに関しては、Welsh-Powellのアルゴリズムを学習する。
+}
+
+\section{参考文献}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\frame{
+\frametitle{参考文献}%---
+Pythonによる数理最適化入門【朝倉書店】
+ \vskip \baselineskip
+新・明解Python入門【=SB Creative】
+}
+
+
+\end{document}
