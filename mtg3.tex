@@ -1,0 +1,155 @@
+% \documentclass[dvipdfmx, 11pt]{beamer}
+\documentclass[aspectratio=169, dvipdfmx, 11pt]{beamer} % aspectratio=43, 149, 169
+\usepackage{here, amsmath, latexsym, amssymb, bm, ascmac, mathtools, multicol, tcolorbox, subfig}
+
+%デザインの選択(省略可)
+\usetheme{Luebeck}
+%カラーテーマの選択(省略可)
+\usecolortheme{orchid}
+%フォントテーマの選択(省略可)
+\usefonttheme{professionalfonts}
+%フレーム内のテーマの選択(省略可)
+\useinnertheme{circles}
+%フレーム外側のテーマの選択(省略可)
+\useoutertheme{infolines}
+%しおりの文字化け解消
+\usepackage{atbegshi}
+\ifnum 42146=\euc"A4A2
+\AtBeginShipoutFirst{\special{pdf:tounicode EUC-UCS2}}
+\else
+\AtBeginShipoutFirst{\special{pdf:tounicode 90ms-RKSJ-UCS2}}
+\fi
+%ナビゲーションバー非表示
+\setbeamertemplate{navigation symbols}{}
+%既定をゴシック体に
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+%タイトル色
+\setbeamercolor{title}{fg=structure, bg=}
+%フレームタイトル色
+\setbeamercolor{frametitle}{fg=structure, bg=}
+%スライド番号のみ表示
+%\setbeamertemplate{footline}[frame number]
+%itemize
+\setbeamertemplate{itemize item}{\small\raise0.5pt\hbox{$\bullet$}}
+\setbeamertemplate{itemize subitem}{\tiny\raise1.5pt\hbox{$\blacktriangleright$}}
+\setbeamertemplate{itemize subsubitem}{\tiny\raise1.5pt\hbox{$\bigstar$}}
+% color
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\green}[1]{\textcolor{green!40!black}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue!80!black}{#1}}
+
+%----------------------------------↑設定--------------------------------%
+
+\title{総合研究における構想}
+\author[Ota Kawai]{BV21053 河合桜汰}
+\institute[G-Zhai Lab]{協調制御研究室}
+\date{January 18,2024}
+
+\begin{document}
+
+\frame{
+\titlepage
+}
+
+\frame{
+\frametitle{発表概要}
+\tableofcontents
+}
+
+\section{今までの学習内容}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+\begin{frame}
+\frametitle{今までの学習内容}%---
+\begin{center}
+\begin{itemize}
+    \item \textbf{グラフ理論}(ex.完全グラフ、次数、同型)
+    \vskip \baselineskip
+    \item \textbf{木やスタック、キュー、幅優先探索などのアルゴリズム}(ex.全域木、2分探索木)
+    \vskip \baselineskip
+    \item \textbf{経路最適化}(ex.ダイクストラ法、郵便配達人問題、巡回セールスマン問題、最大流問題)
+    \vskip \baselineskip
+    \item \textbf{グラフの分割と最適化}(ex.マッチング、時間割問題、4色定理)
+\end{itemize}
+\end{center}
+\end{frame}
+
+\section{興味を持ったこと}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\begin{frame}
+\frametitle{興味を持ったこと}%---
+経路最適化に興味を持った。
+\vskip \baselineskip
+→元々カーナビを作成したいと感じていた。その中で経路最適化が非常に重要であると感じたため。
+\end{frame}
+
+\section{総合研究について}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\begin{frame}
+\frametitle{総合研究について}
+\textbf{総合研究のGOAL(目標)：実際にスマホで使用できるカーナビを作成する}
+\vskip \baselineskip
+研究に必要になるもの
+\vskip \baselineskip
+\begin{itemize}
+    \item 地図データと位置情報
+    \vskip \baselineskip
+    \item 位置情報処理
+    \vskip \baselineskip
+    \item フロントエンド、バックエンド
+    \vskip \baselineskip
+    \item データベース
+    \vskip \baselineskip
+    \item サーバー
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{総合研究について}
+\vskip \baselineskip
+\textbf{\textbf{〜技術スタック(開発言語やサーバー)について〜}}
+\vskip \baselineskip
+アプリの外観(フロントエンド)→TypeScript
+\vskip \baselineskip
+カーナビの実装アルゴリズム(バックエンド)→Python
+\vskip \baselineskip
+スマホアプリの作成→ReactNative
+\vskip \baselineskip
+アプリを動かすためのサーバー(インフラ)→Amazon Web Service
+\includegraphics[width=0.3\linewidth]{img/typescript.png}
+\includegraphics[width=0.3\linewidth]{img/ReactNative.png}
+\includegraphics[width=0.3\linewidth]{img/aws.png}
+\vspace{\baselineskip}
+\end{frame}
+
+\section{今後の研究計画}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\frame{
+\frametitle{今後の研究計画}%---
+春休みの大まかな予定：
+\vskip \baselineskip
+１月下旬〜２月末：ReactNativeのキャッチアップ、Pythonの深い理解
+\vskip \baselineskip
+３月〜３月末：AWSでのサーバー構築、Pythonを用いた経路最適化の勉強
+\vskip \baselineskip
+４月〜未定：カーナビで必要なデータの洗い出し、小さい範囲でのカーナビの作成
+}
+
+\section{参考文献}
+\frame{\tableofcontents[currentsection]} %%目次の参照
+
+\frame{
+\frametitle{参考文献}%---
+Pythonによる数理最適化入門【朝倉書店】
+ \vskip \baselineskip
+新・明解Python入門【=SB Creative】
+\vskip \baselineskip
+NAVITIME JAPANテックブログ
+\vskip \baselineskip
+Android Developersブログ
+}
+
+
+\end{document}
